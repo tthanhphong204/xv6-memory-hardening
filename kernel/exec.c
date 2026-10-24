@@ -87,9 +87,11 @@ kexec(char *path, char **argv)
   // Make the first inaccessible as a stack guard.
   // Use the rest as the user stack.
   sz = PGROUNDUP(sz);
+  p->aslr_stack_offset = (rand() % 16 + 1) * PGSIZE;
+  sz += p->aslr_stack_offset;
+
   uint64 sz1;
-  if ((sz1 = uvmalloc(pagetable, sz, sz + (USERSTACK + 1) * PGSIZE, PTE_W)) ==
-      0)
+  if ((sz1 = uvmalloc(pagetable, sz, sz + (USERSTACK + 1) * PGSIZE, PTE_W)) == 0)
     goto bad;
   sz = sz1;
   uvmclear(pagetable, sz - (USERSTACK + 1) * PGSIZE);
@@ -132,6 +134,8 @@ kexec(char *path, char **argv)
   // Commit to the user image.
   oldpagetable = p->pagetable;
   p->pagetable = pagetable;
+  p->aslr_heap_offset = (rand() % 16 + 1) * PGSIZE;
+  sz += p->aslr_heap_offset;
   p->sz = sz;
   p->trapframe->epc = elf.entry; // initial program counter = ulib.c:start()
   p->trapframe->sp = sp;         // initial stack pointer
