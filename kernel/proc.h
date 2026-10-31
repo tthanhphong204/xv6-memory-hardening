@@ -102,9 +102,12 @@ struct proc {
   struct inode *cwd;           // Current directory
   char name[16];               // Process name (debugging)
 <<<<<<< HEAD
+<<<<<<< HEAD
   struct file *ofile[NOFILE];
   struct inode *cwd;
   char name[16];
+=======
+>>>>>>> phongdev
 
   // Per-process stack canary for stack protection.
   uint64 stack_canary;

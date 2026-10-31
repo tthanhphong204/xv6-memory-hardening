@@ -153,7 +153,12 @@ UPROGS=\
 	$U/_forphan\
 	$U/_dorphan\
 	$U/_sync\
+<<<<<<< HEAD
 	$U/_nullderef
+=======
+        $U/_canary\
+
+>>>>>>> phongdev
 fs.img: mkfs/mkfs README $(UPROGS)
 	mkfs/mkfs fs.img README $(UPROGS)
 
