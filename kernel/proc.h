@@ -101,9 +101,6 @@ struct proc {
   struct file *ofile[NOFILE];  // Open files
   struct inode *cwd;           // Current directory
   char name[16];               // Process name (debugging)
-  struct file *ofile[NOFILE];
-  struct inode *cwd;
-  char name[16];
 
   // Per-process stack canary for stack protection.
   uint64 stack_canary;
