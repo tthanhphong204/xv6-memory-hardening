@@ -110,3 +110,51 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+// ==========================================
+// BẮT ĐẦU SYSTEM CALL MMAP CÓ TÍCH HỢP ASLR
+// ==========================================
+uint64 sys_mmap(void) {
+  uint64 length;
+  int prot, flags, fd, offset;
+
+  // 1. Lấy các tham số mà tiến trình User gửi xuống
+  argaddr(0, &length);
+  argint(1, &prot);
+  argint(2, &flags);
+  argint(3, &fd);
+  argint(4, &offset);
+
+  struct proc *p = myproc();
+  
+  // 2. Tìm một khe VMA trống trong "sổ tay" của tiến trình
+  struct vma *v = 0;
+  for(int i = 0; i < NVMA; i++) {
+    if(p->vmas[i].valid == 0) {
+      v = &p->vmas[i];
+      break;
+    }
+  }
+  if(v == 0) return -1; // Báo lỗi nếu tiến trình đã dùng hết 16 vùng VMA
+
+  // 3. THUẬT TOÁN ASLR (Ngẫu nhiên hóa vị trí)
+  // Làm tròn kích thước yêu cầu lên bội số của trang nhớ (4096 bytes)
+  length = PGROUNDUP(length);
+  
+  // Cấp phát theo hướng từ trên xuống dưới (gắn với aslr_mmap_base đã sinh ngẫu nhiên ở proc.c)
+  p->aslr_mmap_base -= length;
+  uint64 alloc_addr = p->aslr_mmap_base;
+
+  // 4. Ghi chép thông tin vào cấu trúc VMA để quản lý
+  v->valid = 1;
+  v->addr = alloc_addr;
+  v->length = length;
+  v->prot = prot;
+  v->flags = flags;
+  // (Lưu ý: Phần map với file vật lý trên ổ cứng sẽ được làm chi tiết vào tuần sau)
+  
+  // Trả về địa chỉ ngẫu nhiên cho User-space
+  return alloc_addr;
+}
+// ==========================================
+// KẾT THÚC SYSTEM CALL MMAP
+// ==========================================
