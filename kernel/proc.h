@@ -77,7 +77,23 @@ struct trapframe {
 };
 
 enum procstate { UNUSED, USED, SLEEPING, RUNNABLE, RUNNING, ZOMBIE };
+// ==========================================
+// BẮT ĐẦU THÊM CẤU TRÚC VMA CHO MMAP
+// ==========================================
+#define NVMA 16  // Số lượng VMA tối đa cho mỗi tiến trình
 
+struct vma {
+  int valid;          // Trạng thái VMA: 1 = đang dùng, 0 = trống
+  uint64 addr;        // Địa chỉ ảo bắt đầu của vùng mmap
+  uint64 length;      // Kích thước vùng nhớ được ánh xạ
+  int prot;           // Quyền truy cập (Đọc/Ghi/Thực thi)
+  int flags;          // Cờ (Chia sẻ hoặc Riêng tư)
+  struct file *f;     // Con trỏ tới file (nếu là file-backed mmap)
+  uint64 offset;      // Vị trí offset bên trong file
+};
+// ==========================================
+// KẾT THÚC THÊM CẤU TRÚC VMA CHO MMAP
+// ==========================================
 // Per-process state
 struct proc {
   struct spinlock lock;
@@ -101,4 +117,8 @@ struct proc {
   struct file *ofile[NOFILE];  // Open files
   struct inode *cwd;           // Current directory
   char name[16];               // Process name (debugging)
+  uint64 aslr_stack_offset;
+  uint64 aslr_heap_offset;
+  uint64 aslr_mmap_base;   // Địa chỉ nền ngẫu nhiên cấp cho mmap
+  struct vma vmas[NVMA];   // Mảng lưu trữ các vùng mmap của tiến trình này
 };
