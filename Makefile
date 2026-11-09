@@ -10,6 +10,7 @@ OBJS = \
   $K/kalloc.o \
   $K/spinlock.o \
   $K/string.o \
+  $K/random.o \
   $K/main.o \
   $K/vm.o \
   $K/proc.o \
@@ -82,6 +83,9 @@ CFLAGS += -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf
 CFLAGS += -I.
 CFLAGS += $(shell $(CC) -fno-stack-protector -E -x c /dev/null >/dev/null 2>&1 && echo -fno-stack-protector)
 
+# Enable stack protection for user programs only.
+USER_CFLAGS = $(filter-out -fno-stack-protector,$(CFLAGS)) -fstack-protector-strong
+
 # Disable PIE when possible (for Ubuntu 16.10 toolchain)
 ifneq ($(shell $(CC) -dumpspecs 2>/dev/null | grep -e '[^f]no-pie'),)
 CFLAGS += -fno-pie -no-pie
@@ -104,6 +108,10 @@ tags: $(OBJS)
 	etags kernel/*.S kernel/*.c
 
 ULIB = $U/ulib.o $U/usys.o $U/printf.o $U/umalloc.o
+
+# Compile user C programs with stack protection.
+$U/%.o: $U/%.c
+	$(CC) $(USER_CFLAGS) -c -o $@ $<
 
 _%: %.o $(ULIB) $U/user.ld
 	$(LD) $(LDFLAGS) -T $U/user.ld -o $@ $< $(ULIB)
@@ -154,9 +162,13 @@ UPROGS=\
 	$U/_dorphan\
 	$U/_sync\
 <<<<<<< HEAD
+<<<<<<< HEAD
 	$U/_nullderef
 =======
         $U/_canary\
+=======
+	$U/_canary\
+>>>>>>> phongdev
 
 >>>>>>> phongdev
 fs.img: mkfs/mkfs README $(UPROGS)

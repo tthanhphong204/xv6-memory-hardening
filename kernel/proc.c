@@ -125,6 +125,8 @@ found:
   p->pid = allocpid();
   p->state = USED;
 
+  // Generate a unique stack canary for this process.
+  p->stack_canary = random_u64();
   // Allocate a trapframe page.
   if ((p->trapframe = (struct trapframe *)kalloc()) == 0) {
     freeproc(p);
@@ -281,6 +283,8 @@ kfork(void)
 
   // Cause fork to return 0 in the child.
   np->trapframe->a0 = 0;
+
+  np->stack_canary = p->stack_canary;
 
   // increment reference counts on open file descriptors.
   for (i = 0; i < NOFILE; i++)
