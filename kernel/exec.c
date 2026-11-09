@@ -87,13 +87,15 @@ kexec(char *path, char **argv)
   // Allocate some pages at the next page boundary.
   // Make the first inaccessible as a stack guard.
   // Use the rest as the user stack.
-  sz = PGROUNDUP(sz);
-  p->aslr_stack_offset = (rand() % 16 + 1) * PGSIZE;
-  sz += p->aslr_stack_offset;
-
   uint64 sz1;
-  if ((sz1 = uvmalloc(pagetable, sz, sz + (USERSTACK + 1) * PGSIZE, PTE_W)) == 0)
+  sz = PGROUNDUP(sz);
+ 
+  uint64 random_gap = (((uint64)rand()) % 16) + 1;
+  p->aslr_stack_offset = random_gap * PGSIZE;
+  sz += p->aslr_stack_offset;
+  if((sz1 = uvmalloc(pagetable, sz, sz + 2*PGSIZE, PTE_R | PTE_W | PTE_U)) == 0)
     goto bad;
+  
   sz = sz1;
   uvmclear(pagetable, sz - (USERSTACK + 1) * PGSIZE);
   sp = sz;

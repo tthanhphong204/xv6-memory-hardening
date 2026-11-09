@@ -21,4 +21,8 @@
 #define SYS_mkdir  20
 #define SYS_close  21
 #define SYS_sync   22
+<<<<<<< HEAD
 #define SYS_getcanary 23
+=======
+#define SYS_mmap   23
+>>>>>>> hungdev

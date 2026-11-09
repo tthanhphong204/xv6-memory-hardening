@@ -124,9 +124,18 @@ allocproc(void)
 found:
   p->pid = allocpid();
   p->state = USED;
+<<<<<<< HEAD
 
   // Generate a unique stack canary for this process.
   p->stack_canary = random_u64();
+=======
+  
+  for(int i = 0; i < NVMA; i++) {
+      p->vmas[i].valid = 0;
+    }
+  uint64 mmap_random_gap = (((uint64)rand()) % 32) + 1;
+  p->aslr_mmap_base = MAXVA - (2 * PGSIZE) - (mmap_random_gap * PGSIZE);
+>>>>>>> hungdev
   // Allocate a trapframe page.
   if ((p->trapframe = (struct trapframe *)kalloc()) == 0) {
     freeproc(p);
@@ -169,7 +178,28 @@ freeproc(struct proc *p)
   p->chan = 0;
   p->killed = 0;
   p->xstate = 0;
+<<<<<<< HEAD
   p->stack_canary = 0;
+=======
+  p->sz = 0;
+  p->pid = 0;
+  p->name[0] = 0;
+  p->chan = 0;
+  p->killed = 0;
+  
+  // ==========================================
+  // BẮT ĐẦU DỌN DẸP VMA
+  // ==========================================
+  for(int i = 0; i < NVMA; i++) {
+    if(p->vmas[i].valid) {
+      // (Tuần sau làm mmap hoàn chỉnh sẽ gọi hàm unmap ở đây)
+      p->vmas[i].valid = 0;
+    }
+  }
+  // ==========================================
+  // KẾT THÚC DỌN DẸP VMA
+  // ==========================================
+>>>>>>> hungdev
   p->state = UNUSED;
 }
 

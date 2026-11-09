@@ -186,9 +186,12 @@ void            virtio_disk_intr(void);
 #define NELEM(x) (sizeof(x) / sizeof((x)[0]))
 <<<<<<< HEAD
 // rand.c
+#ifdef __cplusplus
 extern "C" {
+#endif
     void srand(unsigned long long seed);
     unsigned long long rand();
+<<<<<<< HEAD
 }
 =======
 
@@ -196,3 +199,8 @@ extern "C" {
 void randominit(void);
 uint64 random_u64(void);
 >>>>>>> phongdev
+=======
+#ifdef __cplusplus
+}
+#endif
+>>>>>>> hungdev
