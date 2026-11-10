@@ -87,14 +87,23 @@ kexec(char *path, char **argv)
   // Allocate some pages at the next page boundary.
   // Make the first inaccessible as a stack guard.
   // Use the rest as the user stack.
+  // Cấp phát Stack với cơ chế ASLR (Address Space Layout Randomization)
   sz = PGROUNDUP(sz);
   uint64 sz1;
-  if ((sz1 = uvmalloc(pagetable, sz, sz + (USERSTACK + 1) * PGSIZE, PTE_W)) ==
-      0)
+  
+  // Tạo độ dịch ngẫu nhiên (ví dụ: dao động trong khoảng từ 0 đến 3 trang nhớ)
+  uint64 rand_offset = (rand() % 4) * PGSIZE;
+  
+  // Cấp phát mở rộng không gian bộ nhớ (cộng thêm dung lượng dự phòng cho độ dịch)
+  if((sz1 = uvmalloc(pagetable, sz, sz + (USERSTACK + 5) * PGSIZE, PTE_W)) == 0)
     goto bad;
   sz = sz1;
-  uvmclear(pagetable, sz - (USERSTACK + 1) * PGSIZE);
-  sp = sz;
+  
+  // Thiết lập trang bảo vệ (guard page) ở đầu vùng nhớ cấp phát
+  uvmclear(pagetable, sz - (USERSTACK + 5) * PGSIZE);
+  
+  // Dịch chuyển vị trí khởi tạo của Stack pointer (sp) và stackbase theo độ lệch ngẫu nhiên
+  sp = sz - rand_offset;
   stackbase = sp - USERSTACK * PGSIZE;
 
   // Copy argument strings into new stack, remember their

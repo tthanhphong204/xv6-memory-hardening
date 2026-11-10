@@ -110,3 +110,9 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+// System call trả về số ngẫu nhiên từ kernel
+uint64
+sys_getrand(void)
+{
+  return (uint64)rand();
+}
