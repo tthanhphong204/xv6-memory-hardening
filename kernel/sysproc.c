@@ -110,6 +110,7 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+<<<<<<< HEAD
 // ==========================================
 // BẮT ĐẦU SYSTEM CALL MMAP CÓ TÍCH HỢP ASLR
 // ==========================================
@@ -158,3 +159,11 @@ uint64 sys_mmap(void) {
 // ==========================================
 // KẾT THÚC SYSTEM CALL MMAP
 // ==========================================
+=======
+// System call trả về số ngẫu nhiên từ kernel
+uint64
+sys_getrand(void)
+{
+  return (uint64)rand();
+}
+>>>>>>> sondev

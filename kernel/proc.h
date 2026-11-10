@@ -119,6 +119,7 @@ struct proc {
   char name[16];               // Process name (debugging)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   struct file *ofile[NOFILE];
   struct inode *cwd;
   char name[16];
@@ -136,4 +137,7 @@ struct proc {
   uint64 aslr_mmap_base;   // Địa chỉ nền ngẫu nhiên cấp cho mmap
   struct vma vmas[NVMA];   // Mảng lưu trữ các vùng mmap của tiến trình này
 >>>>>>> hungdev
+=======
+  unsigned long rand_next;     //
+>>>>>>> sondev
 };

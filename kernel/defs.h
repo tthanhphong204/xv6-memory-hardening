@@ -185,6 +185,7 @@ void            virtio_disk_intr(void);
 // number of elements in fixed-size array
 #define NELEM(x) (sizeof(x) / sizeof((x)[0]))
 <<<<<<< HEAD
+<<<<<<< HEAD
 // rand.c
 #ifdef __cplusplus
 extern "C" {
@@ -204,3 +205,8 @@ uint64 random_u64(void);
 }
 #endif
 >>>>>>> hungdev
+=======
+// rand.c
+int             rand(void);
+void            srand(unsigned int seed);
+>>>>>>> sondev

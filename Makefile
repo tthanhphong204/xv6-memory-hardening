@@ -163,6 +163,7 @@ UPROGS=\
 	$U/_sync\
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	$U/_nullderef
 =======
         $U/_canary\
@@ -171,6 +172,10 @@ UPROGS=\
 >>>>>>> phongdev
 
 >>>>>>> phongdev
+=======
+	$U/_nullderef\
+	$U/_aslrtest
+>>>>>>> sondev
 fs.img: mkfs/mkfs README $(UPROGS)
 	mkfs/mkfs fs.img README $(UPROGS)
 
