@@ -88,7 +88,9 @@ kexec(char *path, char **argv)
   // Use the rest as the user stack.
   uint64 sz1;
   sz = PGROUNDUP(sz);
- 
+  // Dịch chuyển Stack đi một khoảng ngẫu nhiên từ 0 đến 15 trang (mỗi trang 4096 byte)
+  uint64 random_offset = (rand() % 16) * PGSIZE; 
+  sz += random_offset;
   uint64 random_gap = (((uint64)rand()) % 16) + 1;
   p->aslr_stack_offset = random_gap * PGSIZE;
   sz += p->aslr_stack_offset;
