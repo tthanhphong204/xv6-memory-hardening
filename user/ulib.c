@@ -5,14 +5,28 @@
 #include "kernel/vm.h"
 #include "user/user.h"
 
+
+uint64 __stack_chk_guard;
+
+__attribute__((no_stack_protector))
+void
+__stack_chk_fail(void)
+{
+  exit(1);
+}
 //
 // wrapper so that it's OK if main() does not call exit().
 //
+
+__attribute__((no_stack_protector))
 void
 start(int argc, char **argv)
 {
   int r;
   extern int main(int argc, char **argv);
+
+  __stack_chk_guard = getcanary();
+
   r = main(argc, argv);
   exit(r);
 }

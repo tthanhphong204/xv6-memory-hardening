@@ -110,3 +110,11 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+// Return the current process's stack canary.
+uint64
+sys_getcanary(void)
+{
+  return myproc()->stack_canary;
+}
+
