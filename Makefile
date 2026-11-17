@@ -169,6 +169,10 @@ UPROGS=\
         $U/_canary\
 =======
 	$U/_canary\
+<<<<<<< HEAD
+>>>>>>> phongdev
+=======
+	$U/_exploit_overflow\
 >>>>>>> phongdev
 
 >>>>>>> phongdev

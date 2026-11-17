@@ -115,6 +115,7 @@ sys_uptime(void)
   return xticks;
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
 // ==========================================
 // BẮT ĐẦU SYSTEM CALL MMAP CÓ TÍCH HỢP ASLR
 // ==========================================
@@ -171,3 +172,13 @@ sys_getrand(void)
   return (uint64)rand();
 }
 >>>>>>> sondev
+=======
+
+// Return the current process's stack canary.
+uint64
+sys_getcanary(void)
+{
+  return myproc()->stack_canary;
+}
+
+>>>>>>> phongdev
