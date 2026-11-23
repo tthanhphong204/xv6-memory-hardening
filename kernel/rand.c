@@ -1,13 +1,24 @@
-// kernel/rand.c
-static unsigned long long current_seed = 123456789ULL;
+#include "types.h"
+#include "param.h"
+#include "spinlock.h"
+#include "riscv.h"
+#include "defs.h"
 
-void srand(unsigned long long seed) {
-    current_seed = seed;
+static uint64 prng_state = 0x123456789ABCDEF0;
+
+void randinit(void) {
+    prng_state ^= r_time();
+    if (prng_state == 0)
+        prng_state = 0x123456789ABCDEF0;
 }
 
-unsigned long long rand() {
-    const unsigned long long a = 6364136223846793005ULL;
-    const unsigned long long c = 1442695040888963407ULL;
-    current_seed = current_seed * a + c;
-    return current_seed;
+unsigned long long rand(void) {
+    prng_state ^= r_time();
+    if (prng_state == 0)
+        prng_state = 0x123456789ABCDEF0;
+
+    prng_state ^= prng_state << 13;
+    prng_state ^= prng_state >> 7;
+    prng_state ^= prng_state << 17;
+    return prng_state;
 }

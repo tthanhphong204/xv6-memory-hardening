@@ -118,6 +118,7 @@ struct proc {
   struct inode *cwd;           // Current directory
   char name[16];               // Process name (debugging)
   uint64 aslr_stack_offset;
+  int heap_randomized;         // Đánh dấu đã random Heap hay chưa
   uint64 aslr_heap_offset;
   uint64 aslr_mmap_base;   // Địa chỉ nền ngẫu nhiên cấp cho mmap
   struct vma vmas[NVMA];   // Mảng lưu trữ các vùng mmap của tiến trình này
