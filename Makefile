@@ -130,6 +130,11 @@ $U/_forktest: $U/forktest.o $(ULIB)
 	$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o $U/_forktest $U/forktest.o $U/ulib.o $U/usys.o
 	$(OBJDUMP) -S $U/_forktest > $U/forktest.asm
 
+$U/_overflow: $U/exploit_overflow.o $(ULIB)
+	$(LD) $(LDFLAGS) -T $U/user.ld -o $@ $< $(ULIB)
+	$(OBJDUMP) -S $@ > $U/exploit_overflow.asm
+	$(OBJDUMP) -t $@ | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$$/d' > $U/exploit_overflow.sym
+
 mkfs/mkfs: mkfs/mkfs.c $K/fs.h $K/param.h
 	gcc -Wno-unknown-attributes -I. -o mkfs/mkfs mkfs/mkfs.c
 
@@ -170,9 +175,13 @@ UPROGS=\
 =======
 	$U/_canary\
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> phongdev
 =======
 	$U/_exploit_overflow\
+>>>>>>> phongdev
+=======
+	$U/_overflow\
 >>>>>>> phongdev
 
 >>>>>>> phongdev

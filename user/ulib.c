@@ -12,6 +12,7 @@ __attribute__((no_stack_protector))
 void
 __stack_chk_fail(void)
 {
+  write(1, "STACK CANARY MISMATCH\n", 22);
   exit(1);
 }
 //
