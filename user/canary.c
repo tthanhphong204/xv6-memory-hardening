@@ -20,9 +20,5 @@ int main(int argc, char *argv[])
     normal_test();
     printf("Stack canary normal test passed.\n");
 
-    if (argc > 1 && strcmp(argv[1], "overflow") == 0) {
-        printf("Overflow test is not implemented yet.\n");
-    }
-
     exit(0);
 }

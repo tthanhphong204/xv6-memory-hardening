@@ -131,8 +131,8 @@ $U/_forktest: $U/forktest.o $(ULIB)
 
 $U/_overflow: $U/exploit_overflow.o $(ULIB)
 	$(LD) $(LDFLAGS) -T $U/user.ld -o $@ $< $(ULIB)
-	$(OBJDUMP) -S $@ > $*.asm
-	$(OBJDUMP) -t $@ | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$$/d' > $*.sym
+	$(OBJDUMP) -S $@ > $U/exploit_overflow.asm
+	$(OBJDUMP) -t $@ | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$$/d' > $U/exploit_overflow.sym
 
 mkfs/mkfs: mkfs/mkfs.c $K/fs.h $K/param.h
 	gcc -Wno-unknown-attributes -I. -o mkfs/mkfs mkfs/mkfs.c
