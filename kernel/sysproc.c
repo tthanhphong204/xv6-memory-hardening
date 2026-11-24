@@ -45,9 +45,10 @@ sys_sbrk(void)
 
   argint(0, &n);
   argint(1, &t);
-  if(n > 0) {
-    uint64 random_heap_gap = (rand() % 4) * 4096; // 4096 là kích thước 1 trang (PGSIZE)
+  if(n > 0 && myproc()->heap_randomized == 0) {
+    uint64 random_heap_gap = (rand() % 64) * 4096;
     myproc()->sz += random_heap_gap;
+    myproc()->heap_randomized = 1;
   }
   addr = myproc()->sz;
 

@@ -130,6 +130,7 @@ struct proc {
   uint64 stack_canary;
 =======
   uint64 aslr_stack_offset;
+  int heap_randomized;         // Đánh dấu đã random Heap hay chưa
   uint64 aslr_heap_offset;
 <<<<<<< HEAD
 >>>>>>> hungdev
